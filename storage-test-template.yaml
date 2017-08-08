@@ -24,7 +24,7 @@ objects:
     generateName: storage-test-
   spec:
     parallelism: 1    
-    completions: ${NUMBER_OF_RUNS}    
+    completions: 1
     template:         
       metadata:
         name: storage-test
