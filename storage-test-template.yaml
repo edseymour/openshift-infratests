@@ -12,6 +12,11 @@ parameters:
   description: Pull specification for container image, for example docker.io/centos/tools, or registry.access.redhat.com/rhel7/rhel-tools 
   required: true
   value: docker.io/centos/tools
+- name: NUMBER_OF_RUNS
+  displayName: Number of tests
+  description: Number of tests to run
+  value: 1
+  required: true
 objects:
 - apiVersion: batch/v1
   kind: Job
@@ -19,7 +24,7 @@ objects:
     generateName: storage-test-
   spec:
     parallelism: 1    
-    completions: 1    
+    completions: ${NUMBER_OF_RUNS}    
     template:         
       metadata:
         name: storage-test

@@ -16,8 +16,9 @@ oc process -f storage-test-template.yaml PVC_TARGET=test | oc create -f -
 ```
 
 The template takes two parameters:
- * `PVC_TARGET` - the name of the PersistentVolumeClaim to test
- * `TOOLS_IMAGE` - the image spec for the tools image to use, defaults to docker.io/centos/tools
+ * `PVC_TARGET` - the name of the PersistentVolumeClaim to test.
+ * `TOOLS_IMAGE` - the image spec for the tools image to use, defaults to docker.io/centos/tools.
+ * `NUMBER_OF_RUNS` - the number of tests to run, true tests should be run multiple times, but the default for a quick test is just one. 
 
 Note: the `PVC_TARGET` must be available for mounting. If this is a RWO PersistentVolumeClaim then other applications should be stopped before running the test. 
 Example output (the first write is to the local directory, the second to the persistent volume):
