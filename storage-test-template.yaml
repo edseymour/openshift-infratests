@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: storage-test-template
+parameters:
+- name: PVC_TARGET
+  displayName: PersistentVolumeClaim used in test
+  description: Name of PVC to test 
+  required: true
+- name: TOOLS_IMAGE
+  displayName: Tools image
+  description: Pull specification for container image, for example docker.io/centos/tools, or registry.access.redhat.com/rhel7/rhel-tools 
+  required: true
+  value: docker.io/centos/tools
+objects:
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    generateName: storage-test-
+  spec:
+    parallelism: 1    
+    completions: 1    
+    template:         
+      metadata:
+        name: storage-test
+      spec:
+        containers:
+        - name: tools-image
+          image: ${TOOLS_IMAGE}
+          command:
+          - bash 
+          - -c 
+          - dd if=/dev/zero of=/var/tmp/perftest bs=1G count=1 oflag=direct && dd if=/dev/zero of=/test/perftest bs=1G count=1 oflag=direct && rm /test/perftest
+          volumeMounts:
+          - name: testdir
+            mountPath: /test
+        restartPolicy: OnFailure 
+        volumes:
+        - name: testdir
+          persistentVolumeClaim:
+            claimName: ${PVC_TARGET}
+
