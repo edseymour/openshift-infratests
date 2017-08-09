@@ -15,7 +15,7 @@ parameters:
 - name: NUMBER_OF_RUNS
   displayName: Number of tests
   description: Number of tests to run
-  value: 1
+  value: '1'
   required: true
 objects:
 - apiVersion: batch/v1
@@ -24,7 +24,7 @@ objects:
     generateName: storage-test-
   spec:
     parallelism: 1    
-    completions: 1
+    completions: ${NUMBER_OF_RUNS}
     template:         
       metadata:
         name: storage-test
