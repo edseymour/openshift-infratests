@@ -17,13 +17,18 @@ parameters:
   description: Number of tests to run
   value: '1'
   required: true
+- name: NUMBER_OF_CONCURRENT
+  displayName: Concurrent tests
+  description: Number of tests to run at the same time
+  value: '1'
+  required: true
 objects:
 - apiVersion: batch/v1
   kind: Job
   metadata:
     generateName: storage-test-
   spec:
-    parallelism: 1    
+    parallelism: ${NUMBER_OF_CONCURRENT}    
     completions: ${NUMBER_OF_RUNS}
     template:         
       metadata:
@@ -35,7 +40,7 @@ objects:
           command:
           - bash 
           - -c 
-          - dd if=/dev/zero of=/var/tmp/perftest bs=1G count=1 oflag=direct && dd if=/dev/zero of=/test/perftest bs=1G count=1 oflag=direct && rm /test/perftest
+          - dd if=/dev/zero of=/var/tmp/perftest bs=1G count=1 oflag=direct && dd if=/dev/zero of=/test/perftest-$(hostname) bs=1G count=1 oflag=direct && rm /test/perftest-$(hostname)
           volumeMounts:
           - name: testdir
             mountPath: /test
