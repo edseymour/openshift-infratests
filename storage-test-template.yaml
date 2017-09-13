@@ -38,9 +38,9 @@ objects:
         - name: tools-image
           image: ${TOOLS_IMAGE}
           command:
-          - bash 
-          - -c 
-          - date && dd if=/dev/zero of=/var/tmp/perftest bs=1G count=1 oflag=direct && dd if=/dev/zero of=/test/perftest-$(hostname) bs=1G count=1 oflag=direct && rm /test/perftest-$(hostname)
+          - "/bin/bash"
+          - "-c"
+          - "curl -o /var/tmp/storage-test.sh -s https://raw.githubusercontent.com/edseymour/openshift-infratests/master/storage-test.sh; source /var/tmp/storage-test.sh /test"
           volumeMounts:
           - name: testdir
             mountPath: /test
